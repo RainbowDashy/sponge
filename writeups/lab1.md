@@ -5,7 +5,7 @@ My name: [your name here]
 
 My SUNet ID: [your sunetid here]
 
-This lab took me about [n] hours to do. I [did/did not] attend the lab session.
+This lab took me about 5 hours to do. I [did/did not] attend the lab session.
 
 Program Structure and Design of the StreamReassembler:
 []
