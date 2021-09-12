@@ -6,8 +6,41 @@
 #include "tcp_segment.hh"
 #include "wrapping_integers.hh"
 
+#include <deque>
 #include <functional>
 #include <queue>
+
+class TCPResender {
+  private:
+    std::deque<std::pair<uint64_t, TCPSegment>> _segments_flying{};  // segments sent but not acknowledged
+    uint64_t _bytes_in_flight{0};
+    uint32_t _timer{0};
+    bool _running{false};
+
+  public:
+    void push(const TCPSegment &, const uint64_t);
+    uint64_t ack_received(const uint64_t);
+    uint64_t bytes_in_flight() const;
+    bool empty() const { return _segments_flying.empty(); }
+    void start_timer() {
+        if (!_running) {
+            _timer = 0;
+            _running = true;
+        }
+    }
+    void stop_timer() { _running = false; }
+    void reset_timer() {
+        _timer = 0;
+        _running = true;
+    }
+    void time_pass(uint32_t ms) {
+        if (_running) {
+            _timer += ms;
+        }
+    }
+    uint32_t timer() const { return _running ? _timer : 0; }
+    const auto &front() const { return _segments_flying.front(); }
+};
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -25,12 +58,19 @@ class TCPSender {
 
     //! retransmission timer for the connection
     unsigned int _initial_retransmission_timeout;
+    unsigned int _retransmission_timeout;
 
     //! outgoing stream of bytes that have not yet been sent
     ByteStream _stream;
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+    uint64_t _last_ackno{0};
+    uint64_t _consecutive_retransmissions{0};
+
+    uint16_t _window_size{1};
+
+    TCPResender _resender{};
 
   public:
     //! Initialize a TCPSender
