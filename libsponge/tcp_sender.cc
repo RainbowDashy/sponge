@@ -43,7 +43,7 @@ void TCPSender::fill_window() {
         }
         if (_stream.buffer_empty())
             return;
-        // remaining sequence
+        // remaining sequence space
         auto window = _last_ackno + window_size - _next_seqno;
         // payload length
         uint16_t n = min(TCPConfig::MAX_PAYLOAD_SIZE, window);
