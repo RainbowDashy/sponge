@@ -91,7 +91,7 @@ class TCPSender {
     void ack_received(const WrappingInt32 ackno, const uint16_t window_size);
 
     //! \brief Generate an empty-payload segment (useful for creating empty ACK segments)
-    void send_empty_segment();
+    void send_empty_segment(bool = false);
 
     //! \brief create and send segments to fill as much of the window as possible
     void fill_window();
@@ -126,6 +126,17 @@ class TCPSender {
 
     //! \brief relative seqno for the next byte to be sent
     WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
+
+    //! \brief remaining sequence spaces
+    uint64_t remaining_capacity() const {
+        if (_last_ackno + _window_size < _next_seqno)
+            return 0;
+        return _last_ackno + _window_size - _next_seqno;
+    }
+
+    bool fin_acked() const {
+      return stream_in().eof() && next_seqno_absolute() == stream_in().bytes_written() + 2 && bytes_in_flight() == 0;
+    }
     //!@}
 };
 

@@ -127,9 +127,10 @@ void TCPSender::tick(const size_t ms_since_last_tick) {
 
 unsigned int TCPSender::consecutive_retransmissions() const { return _consecutive_retransmissions; }
 
-void TCPSender::send_empty_segment() {
+void TCPSender::send_empty_segment(bool rst) {
     TCPSegment seg;
     seg.header().seqno = next_seqno();
+    seg.header().rst = rst;
     _segments_out.push(seg);
 }
 
