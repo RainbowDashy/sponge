@@ -1,7 +1,9 @@
 #ifndef SPONGE_LIBSPONGE_BYTE_STREAM_HH
 #define SPONGE_LIBSPONGE_BYTE_STREAM_HH
 
+#include "buffer.hh"
 #include <string>
+#include <string_view>
 
 //! \brief An in-order byte stream.
 
@@ -13,7 +15,7 @@ class ByteStream {
     // Your code here -- add private members as necessary.
     size_t _capacity;
     size_t _size;
-    std::string _buffer;
+    BufferList _buffer{};
     size_t _total_read;
     size_t _total_write;
 
