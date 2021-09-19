@@ -12,7 +12,7 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
-size_t TCPConnection::remaining_outbound_capacity() const { return _sender.remaining_capacity(); }
+size_t TCPConnection::remaining_outbound_capacity() const { return _sender.stream_in().remaining_capacity(); }
 
 size_t TCPConnection::bytes_in_flight() const { return _sender.bytes_in_flight(); }
 
@@ -89,7 +89,7 @@ bool TCPConnection::active() const {
 }
 
 size_t TCPConnection::write(const string &data) {
-    cerr << "debug: write " << data << "\n";
+    cerr << "debug: write " << data.size() << " bytes" << std::endl;
     auto n = _sender.stream_in().write(data);
     _sender.fill_window();
     _send_all();

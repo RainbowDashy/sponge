@@ -127,12 +127,6 @@ class TCPSender {
     //! \brief relative seqno for the next byte to be sent
     WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
 
-    //! \brief remaining sequence spaces
-    uint64_t remaining_capacity() const {
-        if (_last_ackno + _window_size < _next_seqno)
-            return 0;
-        return _last_ackno + _window_size - _next_seqno;
-    }
 
     bool fin_acked() const {
       return stream_in().eof() && next_seqno_absolute() == stream_in().bytes_written() + 2 && bytes_in_flight() == 0;
