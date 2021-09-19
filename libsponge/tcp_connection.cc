@@ -1,7 +1,5 @@
 #include "tcp_connection.hh"
 
-#include <iostream>
-
 // Dummy implementation of a TCP connection
 
 // For Lab 4, please replace with a real implementation that passes the
@@ -89,7 +87,6 @@ bool TCPConnection::active() const {
 }
 
 size_t TCPConnection::write(const string &data) {
-    cerr << "debug: write " << data.size() << " bytes" << std::endl;
     auto n = _sender.stream_in().write(data);
     _sender.fill_window();
     _send_all();
