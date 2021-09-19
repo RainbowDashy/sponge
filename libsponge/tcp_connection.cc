@@ -29,11 +29,11 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
         return;
     }
 
-
     _receiver.segment_received(seg);
 
     if (seg.length_in_sequence_space() > 0) {
-        if ((_sender.next_seqno_absolute() == 0) || (_sender.stream_in().eof() && _sender.next_seqno_absolute() < _sender.stream_in().bytes_written() + 2)) {
+        if ((_sender.next_seqno_absolute() == 0) ||
+            (_sender.stream_in().eof() && _sender.next_seqno_absolute() < _sender.stream_in().bytes_written() + 2)) {
             // SYN or FIN
             _sender.fill_window();
         } else {
@@ -50,7 +50,7 @@ void TCPConnection::segment_received(const TCPSegment &seg) {
 
     if (!_linger_after_streams_finish && _receiver.stream_out().eof() && _sender.stream_in().eof() &&
         _sender.fin_acked()) {
-            // end_input_stream();
+        // end_input_stream();
     }
 
     _send_all();
