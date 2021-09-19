@@ -112,6 +112,9 @@ void TCPConnection::tick(const size_t ms_since_last_tick) {
         end_input_stream();
         return;
     }
+    if (_sender.next_seqno_absolute() > bytes_in_flight() && !_sender.stream_in().eof()) {
+        _sender.fill_window();
+    }
     _sender.tick(ms_since_last_tick);
     _send_all();
 }
