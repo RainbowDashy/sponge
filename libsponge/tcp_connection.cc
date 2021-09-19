@@ -1,5 +1,7 @@
 #include "tcp_connection.hh"
 
+#include <iostream>
+
 // Dummy implementation of a TCP connection
 
 // For Lab 4, please replace with a real implementation that passes the
