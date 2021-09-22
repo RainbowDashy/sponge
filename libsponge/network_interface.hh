@@ -46,10 +46,10 @@ class NetworkInterface {
 
     //! ip -> ethernet address
     std::unordered_map<uint32_t, EthernetAddress> _map{};
-    //! ip -> time of last request  
+    //! ip -> time of last request
     std::unordered_map<uint32_t, uint64_t> _arp_req{};
     //! queue of unsent frames due to unknown ethernet address
-    std::unordered_map<uint32_t, std::queue<std::pair<InternetDatagram,Address>>> _frames_wait{};
+    std::unordered_map<uint32_t, std::queue<std::pair<InternetDatagram, Address>>> _frames_wait{};
     //! the time when mapping info is cached
     //! ip -> cached time
     std::unordered_map<uint32_t, uint64_t> _map_clk{};
@@ -78,8 +78,6 @@ class NetworkInterface {
     void tick(const size_t ms_since_last_tick);
 };
 
-class ARPHelper {
-
-};
+class ARPHelper {};
 
 #endif  // SPONGE_LIBSPONGE_NETWORK_INTERFACE_HH
